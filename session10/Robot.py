@@ -1,5 +1,6 @@
 from math import pi, cos, sin
 
+
 class Robot:
 
     def __init__(self, nom, x=0, y=0):

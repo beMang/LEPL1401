@@ -2,6 +2,7 @@ import turtle
 import time
 from Robot import Robot
 
+
 class TurtleBot(Robot):
 
     def __init__(self, nom, x=0, y=0):
@@ -45,22 +46,22 @@ if __name__ == '__main__':
     r2d2 = TurtleBot("R2-D2", 100, 100)
 
     print(r2d2)
-    #R2-D2@(100, 100) angle: 0.0
+    # R2-D2@(100, 100) angle: 0.0
     r2d2.move_forward(50)
     r2d2.turn_left()
     print(r2d2)
-    #R2-D2@(150, 100) angle: 270.0
+    # R2-D2@(150, 100) angle: 270.0
     r2d2.move_forward(50)
     r2d2.turn_left()
     print(r2d2)
-    #R2-D2@(150.0, 50.0) angle: 180.0
+    # R2-D2@(150.0, 50.0) angle: 180.0
     r2d2.move_forward(50)
     r2d2.turn_left()
     print(r2d2)
-    #R2-D2@(100.0, 50.0) angle: 90.0
+    # R2-D2@(100.0, 50.0) angle: 90.0
     r2d2.move_forward(50)
     print(r2d2)
-    #R2-D2@(100, 100) angle: 90.0
+    # R2-D2@(100, 100) angle: 90.0
     r2d2.move_forward(50)
     r2d2.turn_right()
     print(r2d2)

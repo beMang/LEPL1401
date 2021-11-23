@@ -12,6 +12,12 @@ class TestXYRobot(unittest.TestCase):
         self.assertEqual(self.t.position(), (0, 0),
                          "Your XYRobot is not in 0,0 as expected")
 
+        t_position = robot.XYRobot("test", 50, 60)
+        self.assertEqual(t_position.position(), (50, 60),
+                         "Your XYRobot is not in 50,60 as expected")
+        self.assertEqual(self.t.angle(), 0,
+                         "Your XYRobot is not facing EAST as expected")
+
     def test_turn_left(self):
         expected_position = self.t.position()
         expected_angle = (self.t.angle() + 90) % 360
@@ -77,6 +83,20 @@ class TestXYRobot(unittest.TestCase):
         self.assertEqual(self.t.position(), expected_position,
                          "Your XYRobot changed position while turning")
 
+    def test_unplay(self):
+        expected_position = (0,0)
+        self.t.unplay()
+        self.assertEqual(self.t.history(), [], "L'historique n'a pas été vidé correctement") # On s'assure que l'historique est vide
+        self.assertEqual(self.t.position(), expected_position, "Le bot n'est pas revenu à la position initiale comme prévu") # Et qu'on est bien revenu à l'endroit de base
+
+    def test_history(self):
+        self.t.move_backward(50)
+        self.t.move_forward(600)
+        self.t.turn_right()
+        self.t.turn_left()
+        expected_history = [("backward", 50), ("forward", 600), ("right", 90), ("left", 90)]
+        self.assertEqual(self.t.history(), expected_history, "L'historique n'est pas celui qui est attendu")
+        self.t.unplay() #Pour revenir à la place normales
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

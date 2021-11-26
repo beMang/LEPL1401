@@ -1,5 +1,5 @@
-class OrderedLinkedList :
-    
+class OrderedLinkedList:
+
     def __init__(self, lst=[]):
         """
         Initialises a new linked list object, with a given list of elements lst.
@@ -14,10 +14,9 @@ class OrderedLinkedList :
         self.__length = 0          # current length of the linked list
         self.__head = None         # pointer to the first node in the list
         self.__last = None         # pointer to the last node in the list
-        lst.reverse()              # reverse to ensure elements will appear in same order
-        for e in lst :             # add elements of input list lst one by one 
+        for e in lst:             # add elements of input list lst one by one
             self.add(e)
-            
+
     def size(self):
         """
         Accessor method which returns the number of nodes contained in this linked list.
@@ -25,7 +24,7 @@ class OrderedLinkedList :
         @post: Returns the number of nodes (possibly zero) contained in this linked list.
         """
         return self.__length
-    
+
     def inc_size(self):
         """
         Mutator method to increase the size count of this linked list by one.
@@ -50,15 +49,15 @@ class OrderedLinkedList :
                or None if the linked list contains no nodes.
         """
         return self.__head
-    
-    def set_first(self,n):
+
+    def set_first(self, n):
         """
         Mutator method to reassign the head of this linked list to a new node.
         @pre:  -
         @post: The head of this linked list new refers to node n.
         """
         self.__head = n
-        
+
     def add(self, cargo):
         """ 
         Adds a new Node with given cargo to the front of this linked list. 
@@ -68,10 +67,19 @@ class OrderedLinkedList :
                The length counter has been incremented by 1.
                The head of the linked list now points to this new node.
         """
-        node = self.Node(cargo,self.first())
-        if self.first() == None :   # when this is the first element being added,
-            self.__last = node     # set the last pointer to this new node
-        self.set_first(node)
+        if self.first() == None:
+            self.__add_to_begin(cargo)
+        else:
+            cadre = self.first().cadre(cargo)
+            if type(cadre) == str:
+                if cadre == "first":
+                    print("bnon", cargo)
+                    self.__add_to_begin(cargo)
+                elif cadre == "last":
+                    self.add_to_end(cargo)
+            else:
+                node = self.Node(cargo, cadre.next())
+                cadre.set_next(node)
         self.inc_size()
 
     def print(self):
@@ -96,14 +104,14 @@ class OrderedLinkedList :
         if self.first() is not None:
             self.first().print_list_avec_separateur(separateur)
         print("]")
-        
+
     def print_avec_virgule(self):
         """
         Method to print the elements of this linked list,
         separated by commas and a space: ", ".
         """
-        self.print_avec_separateur(", ")    
-    
+        self.print_avec_separateur(", ")
+
     def print_backward(self):
         """
         Prints the contents of this linked list and its nodes, back to front.
@@ -121,7 +129,7 @@ class OrderedLinkedList :
             self.first().print_backward()
         print("]")
 
-    def remove(self):
+    def remove_first(self):
         """
         Removes the node at the start of the list. Leaves the list intact if already empty. 
         """
@@ -130,23 +138,56 @@ class OrderedLinkedList :
             self.set_first(self.first().next())
         if self.size() == 0:       # when there are no more elements in the list,
             self.__last = None       # remove the pointer to the last element
-    
+
+    def remove(cargo):
+        """Supprime un élément de la liste (comparé avec __eq__)
+
+        Args:
+            cargo (any): la valeur à comparer
+        """
+        pass
+
+    def search(cargo):
+        """Renvoie le premier élément égal à cargo, ainsi que sa position
+
+        Args:
+            cargo (any): la valeur à rechercher
+        """
+        pass
+
     def add_to_end(self, cargo):
         """
         Adds a node with given cargo to the end of this linked list.
         """
-        if self.size() == 0 :        # si la liste est encore vide,
-            self.add(cargo)            # ajouter à la fin correspond au ajouter au début
-        else :                         # si la liste contient déjà au moins un noeud (et donc une dernier noeud)
+        if self.size() == 0:        # si la liste est encore vide,
+            # ajouter à la fin correspond au ajouter au début
+            self.__add_to_begin(cargo)
+        # si la liste contient déjà au moins un noeud (et donc une dernier noeud)
+        else:
             node = self.Node(cargo)
-            self.__last.set_next(node) # make the current last node point to this new node
+            # make the current last node point to this new node
+            self.__last.set_next(node)
             self.__last = node         # set the last node reference to this new node
             self.inc_size()            # increment list size by one
+
+    def __add_to_begin(self, cargo):
+        """
+        Add a node at the begin of the list
+
+        Args:
+            cargo ([type]): [description]
+        """
+        if self.first() == None:
+            node = self.Node(cargo, None)
+            self.set_first(node)
+            self.__last = node
+        else:
+            node = self.Node(cargo, self.first())
+            self.set_first(node)
 
     ##############
     # Node class #
     ##############
-
     class Node:
 
         def __init__(self, cargo=None, next=None):
@@ -154,19 +195,19 @@ class OrderedLinkedList :
             Initialises a new Node object.
             @pre:  -
             @post: A new Node object has been initialised.
-                   A node can contain a cargo and a reference to another node.
-                   If none of these are given, the node is initialised with
-                   empty cargo (None) and no reference (None).
+                A node can contain a cargo and a reference to another node.
+                If none of these are given, the node is initialised with
+                empty cargo (None) and no reference (None).
             """
             self.__cargo = cargo
-            self.__next  = next
+            self.__next = next
 
         def value(self):
             """
             Returns the value of the cargo contained in this node.
             @pre:  -
             @post: Returns the value of the cargo contained in this node, 
-                   or None if no cargo  was put there.
+                or None if no cargo  was put there.
             """
             return self.__cargo
 
@@ -175,20 +216,20 @@ class OrderedLinkedList :
             Returns the next node to which this node links.
             @pre:  -
             @post: Returns the node to which this node is linked with its 
-                   next pointer, or None if that pointer is None.
+                next pointer, or None if that pointer is None.
             """
             return self.__next
 
-        def set_next(self,node):
+        def set_next(self, node):
             """
             Sets the next node to which this node links to a new node.
             @pre:  -
             @post: The node to which this node is linked next, 
                 has been set to the new node passed as parameter.
-                   Can also be set to None by passing None as parameter.
+                Can also be set to None by passing None as parameter.
             """
             self.__next = node
-    
+
         def __str__(self):
             """
             Returns a string representation of the cargo of this node.
@@ -196,43 +237,44 @@ class OrderedLinkedList :
             @post: Returns a print representation of the cargo contained in this Node.
             """
             return str(self.value())
-    
-        def __eq__(self,other):
+
+        def __eq__(self, other):
             """
             Comparator to compare two Node objects by their cargo. 
             """
-            if other is not None :
-                return self.value() == other.value()
-            else :
-                return False
-        
-        def __ge__(self, other):
             if other is not None:
-                return self.value() >= other.value()
+                return self.value() == other.value()
             else:
                 return False
 
-        def __le__(self, other):
-            if other is not None:
-                return self.value() <= other.value()
+        def cadre(self, cargo):
+            if cargo <= self.value():
+                return "first"
+            head = self
+            tail = self.__next
+            if tail is not None:
+                if head.value() <= cargo <= tail.value():
+                    return head
+                else:
+                    return tail.cadre(cargo)
             else:
-                return False
+                return "last"
 
         def print_list(self):
             """
             Prints the cargo of this node and then recursively of each node connected to this one.
             @pre:  self is a node (possibly connected to a next node).
             @post: Has printed a space-separated list of the form "a b c ... ",
-                   where "a" is the string-representation of this node,
-                   "b" is the string-representation of my next node, and so on.
-                   A space is printed in-between the printed value.
+                where "a" is the string-representation of this node,
+                "b" is the string-representation of my next node, and so on.
+                A space is printed in-between the printed value.
             """
             head = self
             tail = self.__next       # go to my next node
-            if tail is not None :    # as long as the end of the list has not been reached
-                print(head, end=" ") # print my head 
+            if tail is not None:    # as long as the end of the list has not been reached
+                print(head, end=" ")  # print my head
                 tail.print_list()    # recursively print remainder of the list
-            else :                   # print the last element
+            else:                   # print the last element
                 print(head, end=" ")
 
         def print_backward(self):
@@ -241,14 +283,14 @@ class OrderedLinkedList :
             and then prints the cargo of this node as last value.
             @pre:  self is a node (possibly connected to a next node).
             @post: Has printed a space-separated list of the form "... c b a",
-                   where a is my cargo (self), b is the cargo of the next node, and so on.
-                   The nodes are printed in opposite order: the last nodes' value is printed first.
+                where a is my cargo (self), b is the cargo of the next node, and so on.
+                The nodes are printed in opposite order: the last nodes' value is printed first.
             """
             head = self
             tail = self.__next        # go to my next node
-            if tail is not None :     # as long as the end of the list has not been reached
-                tail.print_backward() # recursively print remainder of the list backwards
-            print(head, end = " ")    # print my head 
+            if tail is not None:     # as long as the end of the list has not been reached
+                tail.print_backward()  # recursively print remainder of the list backwards
+            print(head, end=" ")    # print my head
 
         def print_avec_separateur(self, separateur):
             print("[", end=" ")
@@ -256,11 +298,12 @@ class OrderedLinkedList :
                 self.head.print_list_avec_separateur(separateur)
             print("]")
 
-        def print_list_avec_separateur(self,separateur):
+        def print_list_avec_separateur(self, separateur):
             head = self
             tail = self.__next      # go to my next node
-            if tail is not None : # as long as the end of the list has not been reached
-                print(head, end=separateur)  # print my head, with separateur 
-                tail.print_list_avec_separateur(separateur) # recursively print remainder of the list
+            if tail is not None:  # as long as the end of the list has not been reached
+                print(head, end=separateur)  # print my head, with separateur
+                # recursively print remainder of the list
+                tail.print_list_avec_separateur(separateur)
             else:                 # print the last element
-                print(head, end=" ") # print my head, with a space
+                print(head, end=" ")  # print my head, with a space

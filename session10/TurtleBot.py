@@ -75,6 +75,6 @@ if __name__ == '__main__':
     r2d2.turn_right()
     print(r2d2)
     print(r2d2.history())
-    r2d2.unplay()
     print(r2d2.history())
     time.sleep(2)
+    r2d2.unplay()

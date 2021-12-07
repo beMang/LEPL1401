@@ -1,19 +1,18 @@
-class Classement :
+from orderedlinkedlist import OrderedLinkedList
+
+class Classement:
     """
     Une implémentation primitive de classement, non ordonnée et de capacité fixe.
     @author Kim Mens
     @version 01 Décembre 2019
     """
 
-    __maxcapacity = 10
-
     def __init__(self):
         """
         @pre: -
         @post: un classement vide de taille 0 a été créé
         """
-        self.__resultats = {}   # dictionnaire de résultats actuelle (clé = coureur; valeur = résultat)
-        self.__size = 0         # nombre de résultats actuel (initialement 0, maximum __maxcapacity)
+        self.__resultats = OrderedLinkedList([])
 
     def size(self):
         """
@@ -22,7 +21,10 @@ class Classement :
         @pre:  -
         @post: Le nombre de résultats actuellement stockés dans ce classement a été retourné.
         """
-        return self.__size
+        return self.__resultats.size()
+
+    def result(self):
+        return self.__resultats
 
     def add(self,r):
         """
@@ -34,11 +36,7 @@ class Classement :
                     Le résultat est simplement ajouté à la dictionnaire, sans tenir compte de l'ordre.
                     Une dictionnaire ne donne pas de garanties sur l'ordre des éléments.
         """
-        if self.size() >= self.__maxcapacity :
-            raise Exception("Capacity of classement exceeded")
-        else :
-            self.__size += 1
-            self.__resultats[r.coureur()] = r
+        self.__resultats.add(r)
 
     def get(self,c):
         """
@@ -48,7 +46,11 @@ class Classement :
               classement. Retourne None si le coureur ne figure pas (encore)
               dans le classement.
         """
-        return self.__resultats.get(c)
+        node = self.__resultats.first()
+        while node is not None:
+            if node.value().coureur() == c:
+                return (node.value())
+            node = node.next()
 
     def get_position(self,c):
         """
@@ -64,7 +66,14 @@ class Classement :
                     A vous de la corriger en utilisant une liste chaînée ordonnée
                     comme structure de données, plutôt qu'une simple dictionnaire.
         """
-        return "***position inconnue***"
+        node = self.__resultats.first()
+        i = 1
+        while node is not None:
+            if node.value().coureur() == c:
+                return i
+            i += 1
+            node = node.next()
+        return -1
 
     def remove(self,c):
         """
@@ -74,8 +83,20 @@ class Classement :
               c est comparé au sens de __eq__. Retourne c si un résultat a été retiré,
               of False si c n'est pas trouvé dans la liste.
         """
-        self.__size -= 1
-        return self.__resultats.pop(c,False)
+        node = self.__resultats.first()
+        previous = node
+        while node is not None:
+            if node.value().coureur() == c:
+                if node == self.__resultats.first():
+                    self.__resultats.remove_first()
+                    return c
+                else:
+                    previous.set_next(node.next())
+                    self.__resultats.dec_size()
+                    return c
+            previous = node
+            node = node.next()
+        return False
 
     def __str__(self):
         """
@@ -86,7 +107,7 @@ class Classement :
                avec une ligne par résultat.
         """
         s = ""
-        d = self.__resultats
+        d = self.__resultats.get_as_array()
         for c in d:
-            s += "  " + str(self.get_position(c)) + " > " + str(d[c]) + "\n"
+            s += "  " + str(self.get_position(c.coureur())) + " > " + str(c.coureur()) + "\n"
         return s

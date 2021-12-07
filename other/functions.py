@@ -1,5 +1,5 @@
 import math
-
+# Ce fichier contient diverses fonctions qui ont été demandées lors du cours
 
 def median(a, b, c):
     if a >= b and a >= c:
@@ -198,13 +198,3 @@ def syracuse():
                 print(s0)
     else:
         print("Entrée invalide, entier requis")
-
-class Test:
-    allo = 4
-
-    @classmethod
-    def prout(cls):
-        print(cls.allo)
-
-
-Test.prout()

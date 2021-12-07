@@ -70,17 +70,28 @@ class OrderedLinkedList:
         if self.first() == None:
             self.__add_to_begin(cargo)
         else:
-            cadre = self.first().cadre(cargo)
-            if type(cadre) == str:
-                if cadre == "first":
-                    print("bnon", cargo)
-                    self.__add_to_begin(cargo)
-                elif cadre == "last":
-                    self.add_to_end(cargo)
+            node = self.first()
+            if cargo < self.first().value():
+                self.__add_to_begin(cargo)
+            elif cargo >= self.__last.value():
+                self.add_to_end(cargo)
             else:
-                node = self.Node(cargo, cadre.next())
-                cadre.set_next(node)
-        self.inc_size()
+                while node is not None:
+                    if node.next() is not None:
+                        if node.value() <= cargo < node.next().value():
+                            to_add = self.Node(cargo, node.next())
+                            node.set_next(to_add)
+                            self.inc_size()
+                            break
+                    node = node.next()
+
+    def get_as_array(self):
+        node = self.first()
+        r = []
+        while node is not None:
+            r.append(node.value())
+            node = node.next()
+        return r
 
     def print(self):
         """
@@ -139,21 +150,36 @@ class OrderedLinkedList:
         if self.size() == 0:       # when there are no more elements in the list,
             self.__last = None       # remove the pointer to the last element
 
-    def remove(cargo):
-        """Supprime un élément de la liste (comparé avec __eq__)
+    def remove(self, cargo):
+        node = self.first()
+        previous = node
+        while node is not None:
+            if node.value() == cargo:
+                if node == self.first():
+                    self.remove_first()
+                    return True
+                else:
+                    previous.set_next(node.next())
+                    self.dec_size()
+                    return True
+            previous = node
+            node = node.next()
+        return False
 
-        Args:
-            cargo (any): la valeur à comparer
-        """
-        pass
-
-    def search(cargo):
-        """Renvoie le premier élément égal à cargo, ainsi que sa position
+    def search(self, cargo):
+        """Renvoie le premier élément égal à cargo
 
         Args:
             cargo (any): la valeur à rechercher
         """
-        pass
+        node = self.first()
+        i = 0
+        while node is not None:
+            if node.value() == cargo:
+                return (node.value(), i)
+            i+=1
+            node = node.next()
+        return None
 
     def add_to_end(self, cargo):
         """
@@ -184,6 +210,10 @@ class OrderedLinkedList:
         else:
             node = self.Node(cargo, self.first())
             self.set_first(node)
+        self.inc_size()
+
+    def size(self):
+        return self.__length
 
     ##############
     # Node class #
@@ -247,19 +277,6 @@ class OrderedLinkedList:
             else:
                 return False
 
-        def cadre(self, cargo):
-            if cargo <= self.value():
-                return "first"
-            head = self
-            tail = self.__next
-            if tail is not None:
-                if head.value() <= cargo <= tail.value():
-                    return head
-                else:
-                    return tail.cadre(cargo)
-            else:
-                return "last"
-
         def print_list(self):
             """
             Prints the cargo of this node and then recursively of each node connected to this one.
@@ -307,3 +324,17 @@ class OrderedLinkedList:
                 tail.print_list_avec_separateur(separateur)
             else:                 # print the last element
                 print(head, end=" ")  # print my head, with a space
+
+
+if __name__ == "__main__":
+    lst = OrderedLinkedList([1,3,6,7,8])
+    lst.add(2)
+    lst.add(90)
+    lst.add(-10)
+    lst.remove(7)
+    lst.remove(-10)
+    lst.remove(90)
+    print(lst.search(90))
+    print(lst.search(2))
+    lst.print()
+    print(lst.get_as_array())

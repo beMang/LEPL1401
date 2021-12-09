@@ -18,7 +18,7 @@ class Main :
                  Coureur("Daniel", 31),  \
                  Coureur("Emile", 25),  \
                  Coureur("Fred", 28),  \
-                 Coureur("Gerard", 25) ]
+                 Coureur("Gerard", 25), Coureur("Victor", 16), Coureur("Adrien", 18)]
 
     @classmethod
     def main(cls) :

@@ -198,3 +198,27 @@ def syracuse():
                 print(s0)
     else:
         print("Entrée invalide, entier requis")
+
+
+knowledge = [['Gryffindor', ['brave', 'strong', 'bold']],
+             ['Ravenclaw', ['smart', 'wise', 'curious']],
+             ['Hufflepuff', ['loyal', 'patient', 'hard-working']],
+             ['Slytherin', ['cunning', 'wily', 'malignant']]]
+
+def house_designation(student_qualities):
+    info = {}
+    for house in knowledge:
+        count = 0
+        for quality in house[1]:
+            if quality in student_qualities:
+                count += 1
+        info[house[0]] = count
+
+    info = sorted(info.items(), key=lambda t:t[1])
+    print(info)
+    result = []
+    for i in range(len(info)-1, -1, -1):
+        result.append(info[i][0])
+    return result
+
+print(house_designation(["strong", "bold", "malignant"]))

@@ -1,5 +1,3 @@
-# Programme réalisé  par Adrien Antonutti (NOMA : 3020-21-00) et Louise Buxant (4747-21-00)
-
 # Permet savoir si une chaine de caractère est de l'adn
 def is_adn(s):
     valid_character = ["a", "t", "g", "c"]  # Caractère valide

@@ -1,4 +1,3 @@
-# Réalisé par Adrien Antonutti et Joséphine Civilio
 import turtle                # module des graphiques tortue
 
 win = turtle.Screen()  # initialise la fenêtre

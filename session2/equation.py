@@ -1,5 +1,4 @@
 # Trouver la solution d'équation de type x^a + y^b = z^c
-# Guilherme Alvim Avila (4507-21-00) et Adrien Antonutti (3021-21-00)
 
 # Renvoie le plus grand nombre d'une liste de nombre
 def maximum(array):

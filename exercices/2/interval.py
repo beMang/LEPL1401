@@ -1,0 +1,1 @@
+interval = a <= x <= b
